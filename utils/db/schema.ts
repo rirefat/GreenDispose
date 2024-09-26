@@ -1,4 +1,4 @@
-import { boolean, integer, jsonb, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, jsonb, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 // Users Table
 export const Users = pgTable('users', {
@@ -43,4 +43,14 @@ export const CollectedWaste = pgTable('collected_waste', {
     collectorId: integer('collector_id').references(() => Users.id).notNull(),
     collectionDate: timestamp('collection_date').notNull(),
     status: varchar('status', { length: 20 }).notNull().default('collected')
-})
+});
+
+// Notifications table
+export const Notifications = pgTable('notifications', {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id').references(() => Users.id).notNull(),
+    message: text('message').notNull(),
+    type: varchar('type', { length: 50 }).notNull(),
+    isRead: boolean('is_read').notNull().default(false),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
